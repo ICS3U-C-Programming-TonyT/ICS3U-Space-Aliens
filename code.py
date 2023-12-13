@@ -25,13 +25,33 @@ def game_scene():
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
     # set the layers of all sprites, items show up in order
-    game.layers = [background]
+    game.layers = [ship] + [background]
     # render all sprites
     #   most likely you will only render the background once per game scene
     game.render_block()
 
     # repeat forever, game loop
     while True:
+
+        keys = ugame.buttons.get_pressed()
+
+        if keys & ugame.K_X:
+            print("A")
+        if keys & ugame.K_O:
+            print("B")
+        if keys & ugame.K_START:
+            print("Start")
+        if keys & ugame.K_SELECT:
+            print("Select")
+        if keys & ugame.K_RIGHT:
+            ship.move(ship.x + 1, ship.y)
+        if keys & ugame.K_LEFT:
+            ship.move(ship.x - 1, ship.y)
+        if keys & ugame.K_UP:
+            ship.move(ship.x, ship.y + 1)
+        if keys & ugame.K_DOWN:
+            ship.move(ship.x, ship.y - 1)
+            
         pass  # just a placeholder for now
 
 
