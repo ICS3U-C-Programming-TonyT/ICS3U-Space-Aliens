@@ -8,7 +8,7 @@ import stage
 import ugame
 
 
-def menu_scene_2():
+def menu_scene():
     # this function is the menu scene
 
     # image banks for CircuitPython
@@ -69,6 +69,7 @@ def menu_scene_2():
                 select = options[1]
                 start_text.text("> START <")
                 instruction_text.text("INSTRUCTIONS")
+                
         if keys & ugame.K_DOWN != 0:
             if select == options[2]:
                 pass
@@ -81,82 +82,7 @@ def menu_scene_2():
             game_scene()
 
         # redraw sprites
-        game.tick()
-
-
-def menu_scene_1():
-    # this function is the menu scene
-
-    # image banks for CircuitPython
-    image_bank_mt_background = stage.Bank.from_bmp16("images\mt_game_studio.bmp")
-
-    # Settings
-    select = "start"
-
-    # add text objects
-    text = []
-    text1 = stage.Text(
-        width=29, height=12, font=None, palette=constants.RED_PALETTE, buffer=None
-    )
-    text1.move(20, 10)
-    text1.text("Capybara Catcher")
-    text.append(text1)
-
-    start_text = stage.Text(
-        width=29, height=12, font=None, palette=constants.RED_PALETTE, buffer=None
-    )
-    start_text.move(40, 60)
-    start_text.text("> START <")
-    text.append(start_text)
-
-    instruction_text = stage.Text(
-        width=29, height=12, font=None, palette=constants.RED_PALETTE, buffer=None
-    )
-    instruction_text.move(40, 90)
-    instruction_text.text("INSTRUCTIONS")
-    text.append(instruction_text)
-
-    # sets the background to image 0 in the image bank
-    background = stage.Grid(
-        image_bank_mt_background, constants.SCREEN_X, constants.SCREEN_Y
-    )
-
-    # create a stage for the background to show up on
-    #   and set the frame rate to 60fps
-    game = stage.Stage(ugame.display, constants.FPS)
-    # set the layers, items show up in order
-    game.layers = text + [background]
-    # render the background and initial location of sprite list
-    # most likely you will only render background once per scene
-    game.render_block()
-
-    while True:
-        # settings options
-        options = {
-            1: "start",
-            2: "instructions",
-        }
-        # get user input
-        keys = ugame.buttons.get_pressed()
-        if keys & ugame.K_UP != 0:
-            if select == options[1]:
-                pass
-            else:
-                select = options[1]
-                start_text.text("> START <")
-                instruction_text.text("INSTRUCTIONS")
-        if keys & ugame.K_DOWN != 0:
-            if select == options[2]:
-                pass
-            else:
-                select = options[2]
-                instruction_text.text("> INSTRUCTIONS <")
-                start_text.text("START")
-
-        if keys & ugame.K_START != 0:
-            game_scene()
-
-        # redraw sprites
+        game.render_block()
         game.tick()
 
 
@@ -243,4 +169,4 @@ def game_scene():
 
 
 if __name__ == "__main__":
-    menu_scene_1()
+    menu_scene()
