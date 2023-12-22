@@ -19,6 +19,7 @@ BOOM_SOUND_SETTING = constants.BOOM_SOUND_SETTING
 CRASH_SOUND_SETTING = constants.CRASH_SOUND_SETTING
 PEW_SOUND_SETTING = constants.PEW_SOUND_SETTING
 
+<<<<<<< HEAD
 #  Images
 IMAGE_BANK_MT_BACKGROUND_SETTING = constants.IMAGE_BANK_MT_BACKGROUND_SETTING
 IMAGE_BANK_BACKGROUND_SETTING = constants.IMAGE_BANK_BACKGROUND_SETTING
@@ -86,6 +87,10 @@ def splash_scene():
 
 def menu_scene():
   # this function is the main menu scene
+=======
+def menu_scene():
+    # this function is the menu scene
+>>>>>>> fa8497a8c1f4c58a15dcbcbf7cdaab58ab0b1930
 
   # image banks
   image_bank_background = stage.Bank.from_bmp16(IMAGE_BANK_MT_BACKGROUND_SETTING)
@@ -129,8 +134,41 @@ def menu_scene():
     if keys & ugame.K_START != 0:
       game_scene()
 
+<<<<<<< HEAD
     # redraw Sprites
     game.tick()
+=======
+    while True:
+        # settings options
+        options = {
+            1: "start",
+            2: "instructions",
+        }
+        # get user input
+        keys = ugame.buttons.get_pressed()
+        if keys & ugame.K_UP != 0:
+            if select == options[1]:
+                pass
+            else:
+                select = options[1]
+                start_text.text("> START <")
+                instruction_text.text("INSTRUCTIONS")
+                
+        if keys & ugame.K_DOWN != 0:
+            if select == options[2]:
+                pass
+            else:
+                select = options[2]
+                instruction_text.text("> INSTRUCTIONS <")
+                start_text.text("START")
+
+        if keys & ugame.K_START != 0:
+            game_scene()
+
+        # redraw sprites
+        game.render_block()
+        game.tick()
+>>>>>>> fa8497a8c1f4c58a15dcbcbf7cdaab58ab0b1930
 
 
 def game_scene():
@@ -402,4 +440,8 @@ def game_over_scene(final_score):
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
   splash_scene()
+=======
+    menu_scene()
+>>>>>>> fa8497a8c1f4c58a15dcbcbf7cdaab58ab0b1930

@@ -48,4 +48,14 @@ button_state = {
     "button_just_pressed": "just pressed",
     "button_still_pressed": "still pressed",
     "button_released": "released",
+<<<<<<< HEAD
 }
+=======
+}
+
+# new pallet for red filled text
+RED_PALETTE = (
+    b"\xff\xff\x00\x22\xcey\x22\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+    b"\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+)
+>>>>>>> fa8497a8c1f4c58a15dcbcbf7cdaab58ab0b1930
