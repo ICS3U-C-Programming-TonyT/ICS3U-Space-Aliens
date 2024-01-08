@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-# Created Tony Tran
-# Created December 22, 2023
-# This is the code for Capybara Catcher
+# Created by Aidan Lalonde-Novales
+# Created May 2022
+# This file contains Learning Guide 12's code.
 
 import random
 import time
@@ -12,36 +12,26 @@ import stage
 import supervisor
 import ugame
 
-# Settings
-#  Audio
-COIN_SOUND_SETTING = constants.COIN_SOUND_SETTING
-BOOM_SOUND_SETTING = constants.BOOM_SOUND_SETTING
-CRASH_SOUND_SETTING = constants.CRASH_SOUND_SETTING
-PEW_SOUND_SETTING = constants.PEW_SOUND_SETTING
-
-#  Images
-IMAGE_BANK_MT_BACKGROUND_SETTING = constants.IMAGE_BANK_MT_BACKGROUND_SETTING
-IMAGE_BANK_BACKGROUND_SETTING = constants.IMAGE_BANK_BACKGROUND_SETTING
-IMAGE_BANK_SPRITES_SETTING = constants.IMAGE_BANK_SPRITES_SETTING
 
 def splash_scene():
   # this function is the splash scene
 
   # sound prep
-  coin_sound = open(COIN_SOUND_SETTING, "rb")
+  coin_sound = open("coin.wav", "rb")
   sound = ugame.audio
   sound.stop()
   sound.mute(False)
   sound.play(coin_sound)
 
   # image banks
-  image_bank_mt_background = stage.Bank.from_bmp16(IMAGE_BANK_MT_BACKGROUND_SETTING)
+  image_bank_mt_background = stage.Bank.from_bmp16("mt_game_studio.bmp")
 
   # sets the background to image 0 in the bank
   background = stage.Grid(image_bank_mt_background, constants.SCREEN_X,
                           constants.SCREEN_Y)
 
   # mt logo tiles
+  # https://ezgif.com/sprite-cutter/ezgif-5-818cdbcc3f66.png
   background.tile(2, 2, 0)  # blank white
   background.tile(3, 2, 1)
   background.tile(4, 2, 2)
@@ -88,7 +78,7 @@ def menu_scene():
   # this function is the main menu scene
 
   # image banks
-  image_bank_background = stage.Bank.from_bmp16(IMAGE_BANK_MT_BACKGROUND_SETTING)
+  image_bank_background = stage.Bank.from_bmp16("mt_game_studio.bmp")
 
   # add text objects
   text = []
@@ -98,7 +88,7 @@ def menu_scene():
                      palette=constants.RED_PALETTE,
                      buffer=None)
   text1.move(20, 10)
-  text1.text("Capybara Catcher")
+  text1.text("MT Game Studios")
   text.append(text1)
 
   text2 = stage.Text(width=29,
@@ -159,8 +149,8 @@ def game_scene():
         break
 
   # image banks
-  image_bank_background = stage.Bank.from_bmp16(IMAGE_BANK_MT_BACKGROUND_SETTING)
-  image_bank_sprites = stage.Bank.from_bmp16(IMAGE_BANK_SPRITES_SETTING)
+  image_bank_background = stage.Bank.from_bmp16("space_aliens_background.bmp")
+  image_bank_sprites = stage.Bank.from_bmp16("space_aliens.bmp")
 
   # button state info
   a_button = constants.button_state["button_up"]
@@ -169,9 +159,9 @@ def game_scene():
   select_button = constants.button_state["button_up"]
 
   # get sound ready
-  pew_sound = open(PEW_SOUND_SETTING, "rb")
-  boom_sound = open(BOOM_SOUND_SETTING, "rb")
-  crash_sound = open(CRASH_SOUND_SETTING, "rb")
+  pew_sound = open("pew.wav", "rb")
+  boom_sound = open("boom.wav", "rb")
+  crash_sound = open("crash.wav", "rb")
   sound = ugame.audio
   sound.stop()
   sound.mute(False)
@@ -232,13 +222,13 @@ def game_scene():
 
     if keys & ugame.K_RIGHT != 0:
       if ship.x < (constants.SCREEN_X - constants.SPRITE_SIZE):
-        ship.move((ship.x + constants.SPRITE_MOVEMENT_SPEED), ship.y)
+        ship.move((ship.x + constants.SHIP_SPEED), ship.y)
       else:
         ship.move((constants.SCREEN_X - constants.SPRITE_SIZE), ship.y)
 
     if keys & ugame.K_LEFT != 0:
       if ship.x > 0:
-        ship.move((ship.x - constants.SPRITE_MOVEMENT_SPEED), ship.y)
+        ship.move((ship.x - constants.SHIP_SPEED), ship.y)
       else:
         ship.move(0, ship.y)
 
@@ -307,7 +297,7 @@ def game_scene():
                                         constants.OFF_SCREEN_Y)
               lasers[laser_number].move(constants.OFF_SCREEN_X,
                                         constants.OFF_SCREEN_Y)
-              boom_sound = open(BOOM_SOUND_SETTING, "rb")
+              boom_sound = open("boom.wav", "rb")
               sound.stop()
               sound.play(boom_sound)
               show_alien()
@@ -345,7 +335,7 @@ def game_over_scene(final_score):
   # this function is the game over scene
 
   # image banks for CircuitPython
-  image_bank_2 = stage.Bank.from_bmp16(IMAGE_BANK_MT_BACKGROUND_SETTING)
+  image_bank_2 = stage.Bank.from_bmp16("mt_game_studio.bmp")
 
   # sets the background to image 0 in the image bank
   background = stage.Grid(image_bank_2, constants.SCREEN_GRID_X,

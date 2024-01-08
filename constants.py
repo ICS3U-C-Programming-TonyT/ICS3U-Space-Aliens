@@ -33,7 +33,7 @@ b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff')
 # Settings
 #  Audio
 COIN_SOUND_SETTING = "audio\coin.wav"
-BOOM_SOUND_SETTING = "audio\boom.wav"
+BOOM_SOUND_SETTING = "boom.wav"
 CRASH_SOUND_SETTING = "audio\crash.wav"
 PEW_SOUND_SETTING = "audio\pew.wav"
 
