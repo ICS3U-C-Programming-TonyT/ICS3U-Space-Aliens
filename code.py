@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-# Created by Aidan Lalonde-Novales
-# Created May 2022
-# This file contains Learning Guide 12's code.
+# Created by Tony Tran
+# Created Jan 11
+# This file runs Capybara Catcher.
 
 import random
 import time
@@ -11,7 +11,6 @@ import constants
 import stage
 import supervisor
 import ugame
-
 
 def splash_scene():
   # this function is the splash scene
@@ -88,7 +87,7 @@ def menu_scene():
                      palette=constants.RED_PALETTE,
                      buffer=None)
   text1.move(20, 10)
-  text1.text("MT Game Studios")
+  text1.text("Capybara Catcher")
   text.append(text1)
 
   text2 = stage.Text(width=29,
@@ -128,7 +127,6 @@ def game_scene():
 
   # for score
   score = 0
-
   score_text = stage.Text(width=29, height=14)
   score_text.clear()
   score_text.cursor(0, 0)
@@ -330,10 +328,8 @@ def game_scene():
     game.render_sprites(lasers + [ship] + aliens)
     game.tick()  # wait until refresh rate finishes
 
-
 def game_over_scene(final_score):
   # this function is the game over scene
-
   # image banks for CircuitPython
   image_bank_2 = stage.Bank.from_bmp16("mt_game_studio.bmp")
 
