@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-
-# Created by: Mr. Coxall
-# Created on: October 2019
-# This constants file is for Space Alien game
+# Created By: Tony Tran
+# Date: December. 11, 2023
 
 # CircuitPython screen size is 160x128 and sprites are 16x16
 SCREEN_X = 160

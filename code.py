@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-
-# Created by Aidan Lalonde-Novales
-# Created May 2022
-# This file contains Learning Guide 12's code.
+# Created By: Tony Tran
+# Date: December. 11, 2023
+# This program is the "Space Aliens" program on the PyBadge
 
 import random
 import time
@@ -12,6 +11,7 @@ import stage
 import supervisor
 import ugame
 
+mute = False
 
 def splash_scene():
   # this function is the splash scene
@@ -76,7 +76,6 @@ def splash_scene():
 
 def menu_scene():
   # this function is the main menu scene
-
   # image banks
   image_bank_background = stage.Bank.from_bmp16("mt_game_studio.bmp")
 
@@ -88,7 +87,7 @@ def menu_scene():
                      palette=constants.RED_PALETTE,
                      buffer=None)
   text1.move(20, 10)
-  text1.text("MT Game Studios")
+  text1.text("Capybara Catcher")
   text.append(text1)
 
   text2 = stage.Text(width=29,
@@ -97,7 +96,16 @@ def menu_scene():
                      palette=constants.RED_PALETTE,
                      buffer=None)
   text2.move(40, 110)
-  text2.text("PRESS START")
+  text2.text("Start Game\n  [START]")
+  text.append(text2)
+
+  text2 = stage.Text(width=29,
+                     height=12,
+                     font=None,
+                     palette=constants.RED_PALETTE,
+                     buffer=None)
+  text2.move(40, 90)
+  text2.text("Instructions\n  [Select]")
   text.append(text2)
 
   # sets the background, 10x8
@@ -118,22 +126,71 @@ def menu_scene():
 
     if keys & ugame.K_START != 0:
       game_scene()
+    if keys & ugame.K_SELECT != 0:
+      instruction_scene()
 
     # redraw Sprites
     game.tick()
 
 
+def instruction_scene():
+  # this function is the main menu scene
+  # image banks
+  image_bank_background = stage.Bank.from_bmp16("mt_game_studio.bmp")
+
+  # add text objects
+  text = []
+  text1 = stage.Text(width=29,
+                     height=12,
+                     font=None,
+                     palette=constants.RED_PALETTE,
+                     buffer=None)
+  text1.move(40, 10)
+  text1.text("Instruction")
+  text.append(text1)
+
+  text2 = stage.Text(width=29,
+                     height=12,
+                     font=None,
+                     palette=constants.RED_PALETTE,
+                     buffer=None)
+  text2.move(10, 30)
+  text2.text("[B] Shoot Laser\n\n[Down] Mute\n\n[UP] UnMute\n\n[A] Main Menu")
+  text.append(text2)
+
+  # sets the background, 10x8
+  background = stage.Grid(image_bank_background, constants.SCREEN_X,
+                          constants.SCREEN_Y)
+
+  # creates a stage, sets to 60fps
+  game = stage.Stage(ugame.display, constants.FPS)
+  # order of layers
+  game.layers = text + [background]
+  # render the background and sprite list, most likely once per scene
+  game.render_block()
+
+  # repeat forever, game loop
+  while True:
+    # get user input
+    keys = ugame.buttons.get_pressed()
+
+    if keys & ugame.K_X:
+      menu_scene()
+
+    # redraw Sprites
+    game.tick()
+
 def game_scene():
   # this function is the main game game_scene
-
+  # lives
+  lives = 3
   # for score
   score = 0
-
   score_text = stage.Text(width=29, height=14)
   score_text.clear()
   score_text.cursor(0, 0)
   score_text.move(1, 1)
-  score_text.text("Score: {0}".format(score))
+  score_text.text(f"Score: {score}  Lives: {lives}")
 
   def show_alien():
     # this function takes an alien from off screen and moves it on
@@ -208,6 +265,17 @@ def game_scene():
     # get user input
     keys = ugame.buttons.get_pressed()
 
+    if keys & ugame.K_DOWN != 0:
+      mute = True
+      sound.mute(True)
+    
+    if keys & ugame.K_UP != 0:
+      mute = False
+      sound.mute(False)
+
+    if score == 20:
+      win_scene()
+
     if keys & ugame.K_O != 0:
       if a_button == constants.button_state["button_up"]:
         a_button = constants.button_state["button_just_pressed"]
@@ -224,18 +292,14 @@ def game_scene():
       if ship.x < (constants.SCREEN_X - constants.SPRITE_SIZE):
         ship.move((ship.x + constants.SHIP_SPEED), ship.y)
       else:
-        ship.move((constants.SCREEN_X - constants.SPRITE_SIZE), ship.y)
+        pass
 
     if keys & ugame.K_LEFT != 0:
       if ship.x > 0:
         ship.move((ship.x - constants.SHIP_SPEED), ship.y)
       else:
-        ship.move(0, ship.y)
+        pass
 
-    if keys & ugame.K_UP != 0:
-      ship.move(ship.x, ship.y - 1)
-    if keys & ugame.K_DOWN != 0:
-      ship.move(ship.x, ship.y + 1)
 
     # update game logic
     # play sound on A being pressed
@@ -275,7 +339,7 @@ def game_scene():
         score_text.clear()
         score_text.cursor(0, 0)
         score_text.move(1, 1)
-        score_text.text("Score: {0}".format(score))
+        score_text.text(f"Score: {score}  Lives: {lives}")
 
     # each frame check if any of the lasers are touching any of the aliens
     for laser_number in range(len(lasers)):
@@ -306,7 +370,7 @@ def game_scene():
               score_text.clear()
               score_text.cursor(0, 0)
               score_text.move(1, 1)
-              score_text.text("Score: {0}".format(score))
+              score_text.text(f"Score: {score}  Lives: {lives}")
 
     # each fram check if any aliens are touching the space ship
     for alien_number in range(len(aliens)):
@@ -314,26 +378,80 @@ def game_scene():
         if stage.collide(
             aliens[alien_number].x + 1,
             aliens[alien_number].y,
-            aliens[alien_number].x + 15,
-            aliens[alien_number].y + 15,
+            aliens[alien_number].x + 13,
+            aliens[alien_number].y + 13,
             ship.x,
             ship.y,
-            ship.x + 15,
-            ship.y + 15,
+            ship.x + 13,
+            ship.y + 13,
         ):
           # alien hit the ship
-          sound.stop()
-          sound.play(crash_sound)
-          time.sleep(3.0)
-          game_over_scene(score)
+          if lives == 1:
+            sound.stop()
+            sound.play(crash_sound)
+            time.sleep(3.0)
+            game_over_scene(score)
+          else:
+            aliens[alien_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+            show_alien()
+            lives -= 1
+            score_text.clear()
+            score_text.cursor(0, 0)
+            score_text.move(1, 1)
+            score_text.text(f"Score: {score}  Lives: {lives}")
     # redraw Sprites
     game.render_sprites(lasers + [ship] + aliens)
     game.tick()  # wait until refresh rate finishes
 
+def win_scene():
+  # this function is the main menu scene
+  # image banks
+  image_bank_background = stage.Bank.from_bmp16("mt_game_studio.bmp")
+
+  # add text objects
+  text = []
+  text1 = stage.Text(width=29,
+                     height=12,
+                     font=None,
+                     palette=constants.RED_PALETTE,
+                     buffer=None)
+  text1.move(40, 10)
+  text1.text("WIN")
+  text.append(text1)
+
+  text2 = stage.Text(width=29,
+                     height=12,
+                     font=None,
+                     palette=constants.RED_PALETTE,
+                     buffer=None)
+  text2.move(10, 30)
+  text2.text("Congratulations reaching\n20 points")
+  text.append(text2)
+
+  # sets the background, 10x8
+  background = stage.Grid(image_bank_background, constants.SCREEN_X,
+                          constants.SCREEN_Y)
+
+  # creates a stage, sets to 60fps
+  game = stage.Stage(ugame.display, constants.FPS)
+  # order of layers
+  game.layers = text + [background]
+  # render the background and sprite list, most likely once per scene
+  game.render_block()
+
+  # repeat forever, game loop
+  while True:
+    # get user input
+    keys = ugame.buttons.get_pressed()
+
+    if keys & ugame.K_X:
+      menu_scene()
+
+    # redraw Sprites
+    game.tick()
 
 def game_over_scene(final_score):
   # this function is the game over scene
-
   # image banks for CircuitPython
   image_bank_2 = stage.Bank.from_bmp16("mt_game_studio.bmp")
 
@@ -369,7 +487,6 @@ def game_over_scene(final_score):
   text3.move(32, 110)
   text3.text("PRESS SELECT")
   text.append(text3)
-
   # create a stage for the background to show up on
   #  and set the frame rate to 60fps
   game = stage.Stage(ugame.display, constants.FPS)
